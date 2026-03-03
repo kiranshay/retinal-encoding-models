@@ -1,0 +1,19 @@
+{
+  "name": "Retinal Ganglion Cell Encoding Models",
+  "description": "Build encoding models to predict how retinal neurons respond to visual stimuli and quantify visual information transmission.",
+  "problem_statement": "How do neurons encode sensory information? The retina is an ideal model system with well-defined inputs and outputs.",
+  "technical_approach": "Linear-Nonlinear models, GLMs, and CNNs to learn receptive fields from stimulus-response data. Information theory analysis.",
+  "data_sources": [
+    "CRCNS ret-1 dataset",
+    "Neural Latents Benchmark"
+  ],
+  "tags": [
+    "Encoding Models",
+    "Information Theory",
+    "Neuroscience",
+    "Python"
+  ],
+  "status": "planned",
+  "github_url": null,
+  "demo_url": null
+}
