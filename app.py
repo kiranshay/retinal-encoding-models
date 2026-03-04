@@ -763,8 +763,64 @@ with tab3:
 
     col1, col2 = st.columns([1, 1])
 
+    # ---- Stimulus Animation Playback ----
+    st.markdown("### 🎬 Stimulus Animation")
+    st.markdown("""
+<div class="highlight-box">
+<p>🎥 <strong>Interactive Playback:</strong> Use the slider to scrub through stimulus frames and see how the neural response corresponds to each moment in time. The response trace highlights the current time point.</p>
+</div>
+    """, unsafe_allow_html=True)
+
+    # Frame selection slider
+    current_frame = st.slider("Select Frame", 0, n_frames - 1, 0, key="stim_frame_slider")
+
+    col_anim1, col_anim2 = st.columns([1, 2])
+
+    with col_anim1:
+        # Display current stimulus frame
+        fig, ax = plt.subplots(figsize=(5, 5))
+        im = ax.imshow(stimulus[current_frame], cmap='gray', vmin=-2, vmax=2)
+        ax.set_title(f'Frame {current_frame} ({current_frame * 5} ms)', fontsize=14, fontweight='bold', color='#1e293b')
+        ax.axis('off')
+        plt.colorbar(im, ax=ax, label='Intensity', shrink=0.8)
+        plt.tight_layout()
+        st.pyplot(fig)
+        plt.close()
+
+    with col_anim2:
+        # Display firing rate with current position highlighted
+        fig, ax = plt.subplots(figsize=(10, 4))
+        time = np.arange(n_frames) * 5
+        ax.plot(time, response, color='#667eea', linewidth=1.5, alpha=0.7)
+        ax.fill_between(time, response, alpha=0.2, color='#667eea')
+
+        # Highlight current time point
+        current_time = current_frame * 5
+        ax.axvline(x=current_time, color='#e74c3c', linewidth=2, linestyle='--', label='Current frame')
+        ax.scatter([current_time], [response[current_frame]], color='#e74c3c', s=100, zorder=5, edgecolors='white', linewidths=2)
+
+        ax.set_xlabel('Time (ms)', fontsize=12, color='#475569')
+        ax.set_ylabel('Firing Rate (Hz)', fontsize=12, color='#475569')
+        ax.set_title('Neural Response (current position marked)', fontsize=14, fontweight='bold', color='#1e293b')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.legend(loc='upper right')
+        plt.tight_layout()
+        st.pyplot(fig)
+        plt.close()
+
+    # Current frame stats
+    st.markdown(f"""
+<div class="metric-container" style="text-align: center; margin-top: 1rem;">
+    <p>At frame {current_frame} ({current_frame * 5} ms): <strong>Firing Rate = {response[current_frame]:.1f} Hz</strong></p>
+</div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # ---- Static Overview ----
     with col1:
-        st.markdown("### 📺 Stimulus Frames")
+        st.markdown("### 📺 Stimulus Frame Samples")
 
         fig, axes = plt.subplots(1, 4, figsize=(10, 3))
         frames = [0, n_frames//4, n_frames//2, 3*n_frames//4]
@@ -777,7 +833,7 @@ with tab3:
         plt.close()
 
     with col2:
-        st.markdown("### 📈 Predicted Firing Rate")
+        st.markdown("### 📈 Full Firing Rate Trace")
 
         fig, ax = plt.subplots(figsize=(10, 3))
         time = np.arange(n_frames) * 5
