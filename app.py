@@ -124,10 +124,10 @@ st.markdown("""
         border-radius: 0 8px 8px 0;
     }
 
-    /* Concept Card */
+    /* Concept Card - Dark Mode */
     .concept-card {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(71, 85, 105, 0.5);
         border-radius: 12px;
         padding: 1.25rem;
         margin: 1rem 0;
@@ -137,7 +137,7 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
         font-size: 1rem;
         font-weight: 600;
-        color: #334155;
+        color: #f1f5f9;
         margin: 0 0 0.75rem 0;
         display: flex;
         align-items: center;
@@ -145,33 +145,45 @@ st.markdown("""
     }
 
     .concept-card p, .concept-card li {
-        color: #1e293b;
+        color: #cbd5e1;
         line-height: 1.7;
         margin-bottom: 0.5rem;
     }
 
-    /* Highlight box */
+    .concept-card strong {
+        color: #f8fafc;
+    }
+
+    .concept-card em {
+        color: #a5b4fc;
+    }
+
+    /* Highlight box - Dark Mode */
     .highlight-box {
-        background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%);
-        border: 1px solid #c7d2fe;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+        border: 1px solid rgba(102, 126, 234, 0.4);
         border-radius: 10px;
         padding: 1rem 1.25rem;
         margin: 1rem 0;
     }
 
     .highlight-box p {
-        color: #4338ca;
+        color: #e0e7ff;
         font-weight: 500;
         margin: 0;
     }
 
-    /* Key point callout */
+    .highlight-box strong {
+        color: #f8fafc;
+    }
+
+    /* Key point callout - Dark Mode */
     .key-point {
         display: flex;
         align-items: flex-start;
         gap: 0.75rem;
-        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-        border: 1px solid #6ee7b7;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.1) 100%);
+        border: 1px solid rgba(52, 211, 153, 0.4);
         border-radius: 10px;
         padding: 1rem 1.25rem;
         margin: 1rem 0;
@@ -183,39 +195,43 @@ st.markdown("""
     }
 
     .key-point p {
-        color: #065f46;
+        color: #a7f3d0;
         font-weight: 500;
         margin: 0;
         line-height: 1.6;
     }
 
-    /* Definition list styling */
+    .key-point strong {
+        color: #f8fafc;
+    }
+
+    /* Definition list styling - Dark Mode */
     .def-item {
         display: flex;
         margin-bottom: 0.75rem;
         padding: 0.5rem 0;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid rgba(71, 85, 105, 0.5);
     }
 
     .def-term {
         font-weight: 600;
-        color: #667eea;
+        color: #a5b4fc;
         min-width: 140px;
         flex-shrink: 0;
     }
 
     .def-desc {
-        color: #1e293b;
+        color: #cbd5e1;
         line-height: 1.5;
     }
 
-    /* Algorithm steps */
+    /* Algorithm steps - Dark Mode */
     .algo-step {
         display: flex;
         align-items: flex-start;
         gap: 1rem;
         padding: 0.75rem 0;
-        border-bottom: 1px dashed #e2e8f0;
+        border-bottom: 1px dashed rgba(71, 85, 105, 0.5);
     }
 
     .algo-step:last-child {
@@ -237,11 +253,15 @@ st.markdown("""
     }
 
     .step-content {
-        color: #1e293b;
+        color: #e2e8f0;
         line-height: 1.6;
     }
 
-    /* Parameter cards */
+    .step-content strong {
+        color: #f8fafc;
+    }
+
+    /* Parameter cards - Dark Mode */
     .param-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -250,8 +270,8 @@ st.markdown("""
     }
 
     .param-card {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(71, 85, 105, 0.5);
         border-radius: 10px;
         padding: 1rem;
     }
@@ -260,21 +280,21 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
         font-size: 0.9rem;
         font-weight: 600;
-        color: #667eea;
+        color: #a5b4fc;
         margin: 0 0 0.5rem 0;
     }
 
     .param-card p {
-        color: #334155;
+        color: #cbd5e1;
         font-size: 0.9rem;
         margin: 0;
         line-height: 1.5;
     }
 
-    /* Cell type cards */
+    /* Cell type cards - Dark Mode */
     .cell-card {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border: 2px solid #e2e8f0;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.9) 100%);
+        border: 2px solid rgba(71, 85, 105, 0.5);
         border-radius: 14px;
         padding: 1.25rem;
         height: 100%;
@@ -283,28 +303,32 @@ st.markdown("""
 
     .cell-card:hover {
         border-color: #667eea;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
     }
 
     .cell-card h4 {
         font-family: 'Inter', sans-serif;
         font-size: 1.1rem;
         font-weight: 600;
-        color: #1e293b;
+        color: #f1f5f9;
         margin: 0 0 0.5rem 0;
     }
 
     .cell-card .cell-type {
         font-style: italic;
-        color: #475569;
+        color: #94a3b8;
         font-size: 0.9rem;
         margin-bottom: 0.75rem;
     }
 
     .cell-card .props {
-        color: #1e293b;
+        color: #cbd5e1;
         font-size: 0.9rem;
         line-height: 1.6;
+    }
+
+    .cell-card .props strong {
+        color: #f8fafc;
     }
 
     /* Metric container */
@@ -346,35 +370,54 @@ st.markdown("""
         color: #cbd5e1 !important;
     }
 
-    /* Expander styling */
+    /* Expander styling - Dark Mode */
     [data-testid="stExpander"] p,
     [data-testid="stExpander"] li,
     [data-testid="stExpander"] span {
-        color: #1e293b !important;
+        color: #e2e8f0 !important;
     }
 
     [data-testid="stExpander"] strong {
-        color: #0f172a !important;
+        color: #f8fafc !important;
+    }
+
+    [data-testid="stExpander"] em {
+        color: #a5b4fc !important;
+    }
+
+    /* Expander header styling */
+    [data-testid="stExpander"] summary {
+        color: #f1f5f9 !important;
     }
 
     /* Footer */
     .footer {
         margin-top: 3rem;
         padding: 2rem;
-        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
         border-radius: 16px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid rgba(102, 126, 234, 0.3);
         text-align: center;
     }
 
+    .footer p {
+        color: #e2e8f0 !important;
+        margin: 0.5rem 0;
+    }
+
+    .footer p strong {
+        color: #f8fafc !important;
+    }
+
     .footer a {
-        color: #667eea;
+        color: #818cf8;
         text-decoration: none;
         font-weight: 500;
     }
 
     .footer a:hover {
         text-decoration: underline;
+        color: #a5b4fc;
     }
 </style>
 """, unsafe_allow_html=True)
