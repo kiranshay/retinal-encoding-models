@@ -9,14 +9,14 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
-from scipy.signal import convolve
+from scipy.signal import convolve  # noqa: F401
 from matplotlib.colors import LinearSegmentedColormap
 
 st.set_page_config(
     page_title="Retinal Encoding Models",
     page_icon="👁️",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Custom CSS - Professional styling system
@@ -370,6 +370,90 @@ st.markdown("""
         color: #cbd5e1 !important;
     }
 
+    /* Sidebar expander text — force light colors on dark background */
+    [data-testid="stSidebar"] [data-testid="stExpander"] {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stExpander"] summary,
+    [data-testid="stSidebar"] [data-testid="stExpander"] summary span,
+    [data-testid="stSidebar"] [data-testid="stExpander"] summary p {
+        color: #94a3b8 !important;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stExpander"] p,
+    [data-testid="stSidebar"] [data-testid="stExpander"] span,
+    [data-testid="stSidebar"] [data-testid="stExpander"] li,
+    [data-testid="stSidebar"] [data-testid="stExpander"] div {
+        color: #e2e8f0 !important;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stExpander"] strong {
+        color: #f8fafc !important;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .main .block-container {
+            padding-top: 1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .main-header {
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header {
+            font-size: 1.2rem;
+        }
+
+        .metric-container {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-container h3 {
+            font-size: 1.1rem;
+        }
+
+        .param-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stTabs [data-baseweb="tab-list"] {
+            padding: 4px;
+            gap: 2px;
+        }
+
+        .stTabs [data-baseweb="tab"] {
+            height: 36px;
+            padding: 0 8px;
+            font-size: 0.7rem;
+        }
+
+        .subsection-header {
+            font-size: 1.1rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .def-item {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .def-term {
+            min-width: auto;
+        }
+    }
+
     /* Expander styling - Dark Mode */
     [data-testid="stExpander"] p,
     [data-testid="stExpander"] li,
@@ -426,6 +510,13 @@ st.markdown("""
 st.markdown('<p class="main-header">👁️ Retinal Ganglion Cell Encoding Models</p>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Decoding how neurons transform visual scenes into neural code</p>', unsafe_allow_html=True)
 
+st.markdown("""
+<div class="highlight-box">
+<p>👈 <strong>Getting started:</strong> Open the sidebar (arrow at top-left)
+to configure model parameters. Changes update visualizations in real time.</p>
+</div>
+""", unsafe_allow_html=True)
+
 # Sidebar controls
 st.sidebar.markdown("## 🎛️ Model Parameters")
 
@@ -439,16 +530,50 @@ rf_size = st.sidebar.slider("Receptive Field Size", 5, 25, 15, step=2)
 surround_ratio = st.sidebar.slider("Center-Surround Ratio", 1.5, 4.0, 2.5, step=0.1)
 temporal_decay = st.sidebar.slider("Temporal Decay (ms)", 10, 100, 50)
 noise_level = st.sidebar.slider("Neural Noise Level", 0.0, 0.5, 0.1)
+with st.sidebar.expander("ℹ️ What are these?"):
+    st.markdown("""
+    **Cell Type** — ON-center cells respond to bright spots, OFF-center to dark spots,
+    ON-OFF to any change. Each has a distinct receptive field shape.
+
+    **Receptive Field Size** — How large the region of visual space the neuron
+    responds to. Larger = responds to bigger features.
+
+    **Center-Surround Ratio** — How much bigger the inhibitory surround is
+    compared to the excitatory center. Higher = stronger edge detection.
+
+    **Temporal Decay** — How quickly the neuron's response fades after stimulus
+    onset. Shorter = transient response, longer = sustained response.
+
+    **Neural Noise** — Random variability in firing. Real neurons are noisy;
+    this controls how much trial-to-trial variability to add.
+    """)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("## 🧬 Spike Generation")
 base_rate = st.sidebar.slider("Base Firing Rate (Hz)", 5, 50, 20)
 refractory_ms = st.sidebar.slider("Refractory Period (ms)", 1, 5, 2)
+with st.sidebar.expander("ℹ️ What are these?"):
+    st.markdown("""
+    **Base Firing Rate** — Spontaneous firing rate without any stimulus.
+    RGCs typically fire at 5-30 Hz at rest.
+
+    **Refractory Period** — Minimum time between consecutive spikes.
+    After firing, ion channels need ~1-3 ms to reset.
+    """)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("## 📊 GLM Parameters")
 history_length = st.sidebar.slider("Spike History Length (ms)", 10, 100, 50)
 history_weight = st.sidebar.slider("History Weight", -1.0, 0.0, -0.3, step=0.1)
+with st.sidebar.expander("ℹ️ What are these?"):
+    st.markdown("""
+    **Spike History Length** — How far back in time the neuron's own
+    spiking history influences its current firing rate.
+
+    **History Weight** — Strength of post-spike suppression. More negative =
+    stronger adaptation after firing. At -1.0, the neuron strongly suppresses
+    its own activity after each spike.
+    """)
 
 
 # ==================== Helper Functions ====================
@@ -893,17 +1018,17 @@ with tab3:
 
     # Metrics
     st.markdown("---")
-    col1, col2, col3, col4 = st.columns(4)
+    sparseness = np.sum(response > np.mean(response)) / len(response)
 
-    with col1:
+    met1, met2 = st.columns(2)
+    with met1:
         st.markdown(f"""
 <div class="metric-container">
     <h3>{np.mean(response):.1f} Hz</h3>
     <p>Mean Firing Rate</p>
 </div>
         """, unsafe_allow_html=True)
-
-    with col2:
+    with met2:
         st.markdown(f"""
 <div class="metric-container">
     <h3>{np.max(response):.1f} Hz</h3>
@@ -911,16 +1036,15 @@ with tab3:
 </div>
         """, unsafe_allow_html=True)
 
-    with col3:
+    met3, met4 = st.columns(2)
+    with met3:
         st.markdown(f"""
 <div class="metric-container">
     <h3>{np.std(response):.1f}</h3>
     <p>Response Variability</p>
 </div>
         """, unsafe_allow_html=True)
-
-    with col4:
-        sparseness = np.sum(response > np.mean(response)) / len(response)
+    with met4:
         st.markdown(f"""
 <div class="metric-container">
     <h3>{sparseness:.2f}</h3>

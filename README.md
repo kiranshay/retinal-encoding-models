@@ -1,113 +1,68 @@
-# Retinal Ganglion Cell Encoding Models 🧠👁️
+# Retinal Ganglion Cell Encoding Models
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Neural Coding](https://img.shields.io/badge/Neural-Coding-purple.svg)]()
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Live_Demo-red.svg)](https://retinal-encoding.streamlit.app)
 
-*Decoding the visual language of the retina through computational modeling*
+> Interactive demo of how retinal neurons encode visual information into spike trains
 
-## 🎯 The Problem
+## Overview
 
-How do neurons transform sensory information into the electrical language of the brain? This fundamental question in neuroscience has profound implications for understanding perception, designing neural prosthetics, and advancing artificial intelligence. The retina serves as nature's perfect test case—a well-defined sensory system where we can precisely control visual inputs and measure neural outputs.
+This app demonstrates the computational models neuroscientists use to predict how **retinal ganglion cells (RGCs)** respond to visual stimuli. It implements two classic encoding models:
 
-**Key Challenge**: Traditional approaches struggle to capture the complex, nonlinear computations that retinal ganglion cells perform when encoding visual scenes into spike trains.
+- **Linear-Nonlinear (LN) Model** — convolves stimulus with a spatial receptive field and temporal filter, then applies a softplus nonlinearity
+- **Generalized Linear Model (GLM)** — extends the LN model with spike history dependence, capturing refractory periods and adaptation
 
-## 🔬 Technical Approach
+## What You Can Explore
 
-This project implements and compares multiple encoding model architectures to predict retinal ganglion cell responses:
+- **Receptive fields** — center-surround structure (ON-center, OFF-center, ON-OFF) modeled as difference-of-Gaussians
+- **Temporal dynamics** — biphasic temporal filters showing fast excitation and slower inhibition
+- **Stimulus responses** — how different visual stimuli (white noise, moving bars, gratings) drive neural activity
+- **Spike generation** — converting continuous firing rates to discrete spike trains via Poisson process
+- **Model comparison** — LN vs GLM side-by-side, showing how spike history improves predictions
 
-### Model Zoo
-- **Linear-Nonlinear (LN) Models**: Classic cascade approach with learned receptive fields
-- **Generalized Linear Models (GLMs)**: Incorporating spike history and cell interactions  
-- **Convolutional Neural Networks**: Deep learning approach to discover complex spatiotemporal patterns
-- **Information-Theoretic Analysis**: Quantifying visual information transmission capacity
+## Live Demo
 
-### Pipeline Architecture
-```
-Visual Stimulus → Feature Extraction → Neural Encoding → Spike Prediction
-     ↓                    ↓                 ↓              ↓
-White Noise        Receptive Fields    Nonlinearity   Information
-Movies             Temporal Filters    + History      Content (bits)
-```
+**[Try it on Streamlit](https://retinal-encoding.streamlit.app)**
 
-## 📊 Results & Impact
-
-- **Model Performance**: CNNs achieve 85%+ correlation with actual neural responses
-- **Information Capacity**: Quantified 2-4 bits/spike of visual information transmission
-- **Receptive Field Discovery**: Automated detection of ON/OFF cell types and spatial organization
-- **Biological Insights**: Revealed temporal dynamics and adaptation mechanisms
-
-## 🚀 Installation & Usage
+## Running Locally
 
 ```bash
-# Clone repository
-git clone https://github.com/yourusername/retinal-encoding-models.git
-cd retinal-encoding-models
-
-# Create conda environment
-conda create -n retinal-models python=3.8
-conda activate retinal-models
-
-# Install dependencies
+git clone https://github.com/kiranshay/retinal-ganglion-cell-encoding-models.git
+cd retinal-ganglion-cell-encoding-models
 pip install -r requirements.txt
+streamlit run app.py
 ```
 
-### Quick Start
-```python
-from src.models import CNNEncodingModel
-from src.data import load_crcns_data
+## How It Works
 
-# Load retinal recording data
-stimulus, responses = load_crcns_data('ret-1')
+The core encoding equation:
 
-# Train encoding model
-model = CNNEncodingModel(cell_type='ganglion')
-model.fit(stimulus, responses)
-
-# Predict neural responses
-predictions = model.predict(test_stimulus)
-
-# Analyze information content
-info_rate = model.compute_information_rate()
-print(f"Information rate: {info_rate:.2f} bits/spike")
+```
+λ(t) = f(∫ K(τ) · s(t-τ) dτ + ∫ h(τ) · r(t-τ) dτ)
 ```
 
-## 📈 Data Sources
+Where K is the spatiotemporal receptive field, s is the stimulus, h is the spike history filter, and f is a nonlinearity.
 
-- **CRCNS ret-1 Dataset**: Multi-electrode array recordings from salamander retina
-- **Neural Latents Benchmark**: Standardized evaluation metrics
-- **Custom White Noise Stimuli**: Precisely controlled visual inputs
+**Note:** This is an educational interactive demo using synthetic stimuli and analytically defined model components. It does not train on or validate against real neural recordings.
 
-## 🛠️ Technologies
+## Limitations
 
-- **Deep Learning**: TensorFlow/Keras for CNN architectures
-- **Scientific Computing**: NumPy, SciPy for signal processing
-- **Information Theory**: Custom implementations of mutual information estimators
-- **Visualization**: Matplotlib, Seaborn for neural data analysis
+- Models use hand-tuned parameters, not fitted to real data
+- No real retinal recording data is loaded or compared against
+- CNN/deep learning models referenced in theory are not implemented in this demo
+- Information-theoretic quantities described in the theory tab are not computed
 
-## 🔮 Future Directions
+## References
 
-- [ ] **Multi-cell Models**: Capture population-level encoding strategies
-- [ ] **Adaptive Stimuli**: Closed-loop experiments with real-time feedback
-- [ ] **Cross-species Validation**: Test models on primate retinal data
-- [ ] **Neural Prosthetics**: Apply insights to retinal implant design
-
-## 📚 References
-
+- Chichilnisky, E.J. (2001). A simple white noise analysis of neuronal light responses. *Network: Computation in Neural Systems*
 - Pillow, J.W. et al. (2008). Spatio-temporal correlations and visual signalling in a complete neuronal population. *Nature*
-- Chichilnisky, E.J. (2001). A simple white noise analysis of neuronal light responses. *Network*
+- Field, G.D. & Chichilnisky, E.J. (2007). Information processing in the primate retina. *Annual Review of Neuroscience*
 
-## 🤝 Contributing
+## License
 
-Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-**Keywords**: Computational Neuroscience • Encoding Models • Information Theory • Retinal Processing • Neural Coding
+MIT License
 
 ---
 
-## Portfolio Description
-
-**Retinal Ganglion Cell Encoding Models** - Built computational models to decode how retinal neurons transform visual information into neural code, achieving 85%+ correlation with biological responses using CNNs and information theory. Implemented Linear-Nonlinear models, GLMs, and deep learning architectures in Python/TensorFlow to quantify 2-4 bits/spike of visual information transmission. This work bridges neuroscience and AI, with applications in neural prosthetics and bio-inspired computer vision systems.
+Built by [Kiran Shay](https://kiranshay.github.io) · Johns Hopkins University
