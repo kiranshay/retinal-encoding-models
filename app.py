@@ -22,8 +22,7 @@ st.set_page_config(
 # Custom CSS - Professional styling system
 st.markdown("""
 <style>
-    /* Import Google Font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Nunito+Sans:wght@400;500;600;700&display=swap');
 
     /* Global styles */
     .main .block-container {
@@ -32,22 +31,20 @@ st.markdown("""
     }
 
     .main-header {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
         font-size: 2.75rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #B8860B;
         text-align: center;
         margin-bottom: 0.5rem;
         letter-spacing: -0.02em;
     }
 
     .subtitle {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Nunito Sans', sans-serif;
         font-size: 1.1rem;
-        color: #64748b;
+        color: #7A6B5B;
         text-align: center;
         margin-bottom: 2rem;
         font-weight: 400;
@@ -56,11 +53,11 @@ st.markdown("""
     /* Enhanced Tab Styling */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
-        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        background: linear-gradient(180deg, #FDF8F0 0%, #F5EDE0 100%);
         padding: 8px;
         border-radius: 16px;
-        border: 1px solid #e2e8f0;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        border: 1px solid rgba(184, 134, 11, 0.15);
+        box-shadow: inset 0 2px 4px rgba(184, 134, 11, 0.05);
     }
 
     .stTabs [data-baseweb="tab"] {
@@ -68,23 +65,24 @@ st.markdown("""
         background: transparent;
         border-radius: 12px;
         padding: 0 24px;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Nunito Sans', sans-serif;
         font-weight: 600;
         font-size: 0.95rem;
-        color: #475569;
-        border: none;
+        color: #7A6B5B;
+        border: 1px solid transparent;
         transition: all 0.2s ease;
     }
 
     .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(102, 126, 234, 0.08);
-        color: #667eea;
+        background: rgba(184, 134, 11, 0.08);
+        color: #B8860B;
+        border-color: rgba(184, 134, 11, 0.2);
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        background: #B8860B !important;
         color: white !important;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+        box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
     }
 
     .stTabs [data-baseweb="tab-highlight"] {
@@ -97,47 +95,44 @@ st.markdown("""
 
     /* Section Headers */
     .section-header {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
         font-size: 1.75rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #B8860B;
         margin-bottom: 1.5rem;
         padding-bottom: 0.75rem;
-        border-bottom: 3px solid;
-        border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+        border-bottom: 3px solid rgba(184, 134, 11, 0.3);
         display: block;
     }
 
     /* Subsection Headers */
     .subsection-header {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Cormorant Garamond', serif;
         font-size: 1.35rem;
         font-weight: 600;
-        color: #334155;
+        color: #2A2118;
         margin: 2rem 0 1rem 0;
         padding: 0.75rem 1rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-left: 4px solid #667eea;
+        background: linear-gradient(135deg, #FDF8F0 0%, #F5EDE0 100%);
+        border-left: 4px solid #B8860B;
         border-radius: 0 8px 8px 0;
     }
 
-    /* Concept Card - Dark Mode */
+    /* Concept Card */
     .concept-card {
-        background: rgba(30, 41, 59, 0.8);
-        border: 1px solid rgba(71, 85, 105, 0.5);
+        background: #F5EDE0;
+        border: 1px solid rgba(184, 134, 11, 0.15);
         border-radius: 12px;
         padding: 1.25rem;
         margin: 1rem 0;
     }
 
     .concept-card h5 {
-        font-family: 'Inter', sans-serif;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #f1f5f9;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #2A2118;
         margin: 0 0 0.75rem 0;
         display: flex;
         align-items: center;
@@ -145,45 +140,48 @@ st.markdown("""
     }
 
     .concept-card p, .concept-card li {
-        color: #cbd5e1;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         line-height: 1.7;
         margin-bottom: 0.5rem;
     }
 
     .concept-card strong {
-        color: #f8fafc;
+        color: #B8860B;
     }
 
     .concept-card em {
-        color: #a5b4fc;
+        color: #5B3A6B;
     }
 
-    /* Highlight box - Dark Mode */
+    /* Highlight box */
     .highlight-box {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-        border: 1px solid rgba(102, 126, 234, 0.4);
+        background: rgba(184, 134, 11, 0.08);
+        border: 1px solid rgba(184, 134, 11, 0.15);
+        border-left: 4px solid #B8860B;
         border-radius: 10px;
         padding: 1rem 1.25rem;
         margin: 1rem 0;
     }
 
     .highlight-box p {
-        color: #e0e7ff;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         font-weight: 500;
         margin: 0;
     }
 
     .highlight-box strong {
-        color: #f8fafc;
+        color: #B8860B;
     }
 
-    /* Key point callout - Dark Mode */
+    /* Key point callout */
     .key-point {
         display: flex;
         align-items: flex-start;
         gap: 0.75rem;
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.1) 100%);
-        border: 1px solid rgba(52, 211, 153, 0.4);
+        background: rgba(91, 58, 107, 0.06);
+        border: 1px solid rgba(91, 58, 107, 0.15);
         border-radius: 10px;
         padding: 1rem 1.25rem;
         margin: 1rem 0;
@@ -195,43 +193,46 @@ st.markdown("""
     }
 
     .key-point p {
-        color: #a7f3d0;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         font-weight: 500;
         margin: 0;
         line-height: 1.6;
     }
 
     .key-point strong {
-        color: #f8fafc;
+        color: #5B3A6B;
     }
 
-    /* Definition list styling - Dark Mode */
+    /* Definition list styling */
     .def-item {
         display: flex;
         margin-bottom: 0.75rem;
         padding: 0.5rem 0;
-        border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+        border-bottom: 1px solid rgba(184, 134, 11, 0.12);
     }
 
     .def-term {
+        font-family: 'Nunito Sans', sans-serif;
         font-weight: 600;
-        color: #a5b4fc;
+        color: #B8860B;
         min-width: 140px;
         flex-shrink: 0;
     }
 
     .def-desc {
-        color: #cbd5e1;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         line-height: 1.5;
     }
 
-    /* Algorithm steps - Dark Mode */
+    /* Algorithm steps */
     .algo-step {
         display: flex;
         align-items: flex-start;
         gap: 1rem;
         padding: 0.75rem 0;
-        border-bottom: 1px dashed rgba(71, 85, 105, 0.5);
+        border-bottom: 1px dashed rgba(184, 134, 11, 0.15);
     }
 
     .algo-step:last-child {
@@ -239,8 +240,9 @@ st.markdown("""
     }
 
     .step-num {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #B8860B;
         color: white;
+        font-family: 'Nunito Sans', sans-serif;
         font-weight: 700;
         width: 28px;
         height: 28px;
@@ -253,15 +255,16 @@ st.markdown("""
     }
 
     .step-content {
-        color: #e2e8f0;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         line-height: 1.6;
     }
 
     .step-content strong {
-        color: #f8fafc;
+        color: #B8860B;
     }
 
-    /* Parameter cards - Dark Mode */
+    /* Parameter cards */
     .param-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -270,31 +273,32 @@ st.markdown("""
     }
 
     .param-card {
-        background: rgba(30, 41, 59, 0.8);
-        border: 1px solid rgba(71, 85, 105, 0.5);
+        background: #F5EDE0;
+        border: 1px solid rgba(184, 134, 11, 0.15);
         border-radius: 10px;
         padding: 1rem;
     }
 
     .param-card h6 {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #a5b4fc;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #B8860B;
         margin: 0 0 0.5rem 0;
     }
 
     .param-card p {
-        color: #cbd5e1;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         font-size: 0.9rem;
         margin: 0;
         line-height: 1.5;
     }
 
-    /* Cell type cards - Dark Mode */
+    /* Cell type cards */
     .cell-card {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.9) 100%);
-        border: 2px solid rgba(71, 85, 105, 0.5);
+        background: #FDF8F0;
+        border: 2px solid rgba(184, 134, 11, 0.15);
         border-radius: 14px;
         padding: 1.25rem;
         height: 100%;
@@ -302,72 +306,76 @@ st.markdown("""
     }
 
     .cell-card:hover {
-        border-color: #667eea;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        border-color: #B8860B;
+        box-shadow: 0 4px 12px rgba(184, 134, 11, 0.15);
     }
 
     .cell-card h4 {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #f1f5f9;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #2A2118;
         margin: 0 0 0.5rem 0;
     }
 
     .cell-card .cell-type {
+        font-family: 'Cormorant Garamond', serif;
         font-style: italic;
-        color: #94a3b8;
+        color: #5B3A6B;
         font-size: 0.9rem;
         margin-bottom: 0.75rem;
     }
 
     .cell-card .props {
-        color: #cbd5e1;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118;
         font-size: 0.9rem;
         line-height: 1.6;
     }
 
     .cell-card .props strong {
-        color: #f8fafc;
+        color: #B8860B;
     }
 
     /* Metric container */
     .metric-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #FDF8F0;
         padding: 1.25rem;
         border-radius: 16px;
-        color: white;
+        border: 1px solid rgba(184, 134, 11, 0.15);
         text-align: center;
-        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        box-shadow: 0 4px 16px rgba(184, 134, 11, 0.08);
     }
 
     .metric-container h3 {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Cormorant Garamond', serif;
         font-size: 1.75rem;
         font-weight: 700;
+        color: #B8860B;
         margin: 0 0 4px 0;
     }
 
     .metric-container p {
+        font-family: 'Nunito Sans', sans-serif;
         font-size: 0.85rem;
-        opacity: 0.9;
+        color: #7A6B5B;
         margin: 0;
         font-weight: 500;
     }
 
     /* Sidebar Styling */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        background: linear-gradient(180deg, #3B2F20 0%, #2A2118 100%);
     }
 
     [data-testid="stSidebar"] .stMarkdown h2,
     [data-testid="stSidebar"] .stMarkdown h3 {
-        color: #f8fafc !important;
-        font-family: 'Inter', sans-serif;
+        color: #FDF8F0 !important;
+        font-family: 'Cormorant Garamond', serif;
     }
 
     [data-testid="stSidebar"] .stSlider label {
-        color: #cbd5e1 !important;
+        color: #D4C4A8 !important;
     }
 
     /* Sidebar expander text — force light colors on dark background */
@@ -380,18 +388,18 @@ st.markdown("""
     [data-testid="stSidebar"] [data-testid="stExpander"] summary,
     [data-testid="stSidebar"] [data-testid="stExpander"] summary span,
     [data-testid="stSidebar"] [data-testid="stExpander"] summary p {
-        color: #94a3b8 !important;
+        color: #D4C4A8 !important;
     }
 
     [data-testid="stSidebar"] [data-testid="stExpander"] p,
     [data-testid="stSidebar"] [data-testid="stExpander"] span,
     [data-testid="stSidebar"] [data-testid="stExpander"] li,
     [data-testid="stSidebar"] [data-testid="stExpander"] div {
-        color: #e2e8f0 !important;
+        color: #F5EDE0 !important;
     }
 
     [data-testid="stSidebar"] [data-testid="stExpander"] strong {
-        color: #f8fafc !important;
+        color: #FDF8F0 !important;
     }
 
     /* Mobile Responsive */
@@ -454,54 +462,55 @@ st.markdown("""
         }
     }
 
-    /* Expander styling - Dark Mode */
+    /* Expander styling */
     [data-testid="stExpander"] p,
     [data-testid="stExpander"] li,
     [data-testid="stExpander"] span {
-        color: #e2e8f0 !important;
+        color: #2A2118 !important;
     }
 
     [data-testid="stExpander"] strong {
-        color: #f8fafc !important;
+        color: #B8860B !important;
     }
 
     [data-testid="stExpander"] em {
-        color: #a5b4fc !important;
+        color: #5B3A6B !important;
     }
 
     /* Expander header styling */
     [data-testid="stExpander"] summary {
-        color: #f1f5f9 !important;
+        color: #2A2118 !important;
     }
 
     /* Footer */
     .footer {
         margin-top: 3rem;
         padding: 2rem;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+        background: #F5EDE0;
         border-radius: 16px;
-        border: 1px solid rgba(102, 126, 234, 0.3);
+        border: 1px solid rgba(184, 134, 11, 0.15);
         text-align: center;
     }
 
     .footer p {
-        color: #e2e8f0 !important;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #2A2118 !important;
         margin: 0.5rem 0;
     }
 
     .footer p strong {
-        color: #f8fafc !important;
+        color: #B8860B !important;
     }
 
     .footer a {
-        color: #818cf8;
+        color: #5B3A6B;
         text-decoration: none;
         font-weight: 500;
     }
 
     .footer a:hover {
         text-decoration: underline;
-        color: #a5b4fc;
+        color: #B8860B;
     }
 </style>
 """, unsafe_allow_html=True)
