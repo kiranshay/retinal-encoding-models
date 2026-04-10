@@ -158,8 +158,8 @@ st.markdown("""
 
     /* Highlight box */
     .highlight-box {
-        background: rgba(184, 134, 11, 0.08);
-        border: 1px solid rgba(184, 134, 11, 0.15);
+        background: #FBF3E0 !important;
+        border: 1px solid rgba(184, 134, 11, 0.2);
         border-left: 4px solid #B8860B;
         border-radius: 10px;
         padding: 1rem 1.25rem;
@@ -168,13 +168,13 @@ st.markdown("""
 
     .highlight-box p {
         font-family: 'Nunito Sans', sans-serif;
-        color: #2A2118;
+        color: #2A2118 !important;
         font-weight: 500;
         margin: 0;
     }
 
     .highlight-box strong {
-        color: #B8860B;
+        color: #B8860B !important;
     }
 
     /* Key point callout */
