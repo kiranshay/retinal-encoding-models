@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 from scipy.signal import convolve  # noqa: F401
 from matplotlib.colors import LinearSegmentedColormap
+import io
+import json
 
 st.set_page_config(
     page_title="Retinal Encoding Models",
@@ -1165,6 +1167,64 @@ with tab4:
             """, unsafe_allow_html=True)
 
 
+    # Spike-Triggered Average (STA)
+    st.markdown('<div class="subsection-header">🎯 Spike-Triggered Average (STA)</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+<div class="concept-card">
+    <h5>🔬 What is the STA?</h5>
+    <p>The <strong>spike-triggered average</strong> is the gold standard method for estimating a neuron's
+    receptive field. For each spike, we grab the stimulus window preceding it (here, 200ms) and average
+    all these windows. The result reveals what stimulus feature drives the neuron to fire.</p>
+</div>
+    """, unsafe_allow_html=True)
+
+    # Compute STA from the white noise stimulus and spikes
+    sta_stimulus = generate_stimulus("White Noise", rf_size, n_frames)
+    sta_rf = create_receptive_field(rf_size, cell_type, surround_ratio)
+    sta_temporal = create_temporal_filter(50, temporal_decay)
+    sta_response = predict_response_ln(sta_stimulus, sta_rf, sta_temporal, noise_level)
+    sta_spikes = generate_poisson_spikes(sta_response * base_rate / 10, dt_ms=5, refractory_ms=refractory_ms)
+
+    # Compute 1D temporal STA: project stimulus through RF, then average pre-spike windows
+    spatial_projection = np.array([np.sum(sta_stimulus[t] * sta_rf) for t in range(n_frames)])
+    sta_window_ms = 200
+    sta_window_frames = sta_window_ms // 5  # 40 frames at 5ms/frame
+    spike_indices = np.where(sta_spikes > 0)[0]
+
+    sta_snippets = []
+    for si in spike_indices:
+        if si >= sta_window_frames:
+            sta_snippets.append(spatial_projection[si - sta_window_frames:si])
+
+    if len(sta_snippets) > 2:
+        sta_mean = np.mean(sta_snippets, axis=0)
+        sta_time = np.arange(-sta_window_ms, 0, 5)
+
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.plot(sta_time, sta_mean, color='#667eea', linewidth=2.5)
+        ax.fill_between(sta_time, sta_mean, 0, where=sta_mean > 0, alpha=0.3, color='#667eea', label='Excitatory')
+        ax.fill_between(sta_time, sta_mean, 0, where=sta_mean < 0, alpha=0.3, color='#ef4444', label='Inhibitory')
+        ax.axhline(y=0, color='#94a3b8', linestyle='--', alpha=0.5)
+        ax.set_xlabel('Time before spike (ms)', fontsize=12, color='#475569')
+        ax.set_ylabel('Mean stimulus projection', fontsize=12, color='#475569')
+        ax.set_title(f'Spike-Triggered Average ({len(sta_snippets)} spikes)', fontsize=14, fontweight='bold', color='#1e293b')
+        ax.legend(frameon=True, fancybox=True, shadow=True)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.tight_layout()
+        st.pyplot(fig)
+        plt.close()
+
+        st.markdown("""
+<div class="highlight-box">
+<p>💡 The STA should resemble the temporal filter (biphasic shape). If the STA is flat, the neuron is not reliably driven by the stimulus.</p>
+</div>
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("Not enough spikes to compute a reliable STA. Try increasing the base firing rate.")
+
+
 # ==================== Tab 5: Model Comparison ====================
 with tab5:
     st.markdown('<p class="section-header">Model Comparison: LN vs GLM</p>', unsafe_allow_html=True)
@@ -1294,6 +1354,70 @@ with tab5:
     </div>
 </div>
         """, unsafe_allow_html=True)
+
+    # Quantitative model comparison metrics
+    st.markdown('<div class="subsection-header">📊 Quantitative Comparison</div>', unsafe_allow_html=True)
+
+    # Use the GLM response as a pseudo-ground-truth (it includes history effects)
+    # Compare both models against a common reference spike train
+    # For correlation and MSE, compare firing rate predictions
+    _corr_ln_glm = np.corrcoef(response_ln, response_glm)[0, 1] if len(response_ln) == len(response_glm) else 0
+
+    # Correlation of each model's predicted rate with observed spikes (smoothed)
+    spikes_ln_smooth = gaussian_filter(spikes_ln.astype(float), sigma=3) * (1000 / 5)
+    spikes_glm_smooth = gaussian_filter(spikes_glm.astype(float), sigma=3) * (1000 / 5)
+
+    corr_ln = np.corrcoef(response_ln, spikes_ln_smooth)[0, 1] if np.std(spikes_ln_smooth) > 0 else 0
+    corr_glm = np.corrcoef(response_glm, spikes_glm_smooth)[0, 1] if np.std(spikes_glm_smooth) > 0 else 0
+
+    mse_ln = np.mean((response_ln - spikes_ln_smooth) ** 2)
+    mse_glm = np.mean((response_glm - spikes_glm_smooth) ** 2)
+
+    # Poisson log-likelihood: sum(r * log(pred) - pred) where r = spike count
+    def poisson_log_likelihood(actual_spikes, predicted_rate):
+        pred = np.maximum(predicted_rate, 1e-8)
+        return np.sum(actual_spikes * np.log(pred) - pred)
+
+    ll_ln = poisson_log_likelihood(spikes_ln, np.maximum(response_ln * 5 / 1000, 1e-8))
+    ll_glm = poisson_log_likelihood(spikes_glm, np.maximum(response_glm * 5 / 1000, 1e-8))
+
+    comparison_data = {
+        "Metric": ["Correlation (rate vs spikes)", "MSE (rate vs spikes)", "Poisson Log-Likelihood"],
+        "LN Model": [f"{corr_ln:.4f}", f"{mse_ln:.4f}", f"{ll_ln:.2f}"],
+        "GLM": [f"{corr_glm:.4f}", f"{mse_glm:.4f}", f"{ll_glm:.2f}"],
+    }
+    st.table(comparison_data)
+
+    # Data export buttons
+    st.markdown('<div class="subsection-header">💾 Data Export</div>', unsafe_allow_html=True)
+
+    export_col1, export_col2 = st.columns(2)
+
+    with export_col1:
+        # Spike train CSV
+        spike_csv = io.StringIO()
+        spike_csv.write("time_ms,ln_spike,glm_spike\n")
+        for t_idx in range(len(time)):
+            spike_csv.write(f"{time[t_idx]},{int(spikes_ln[t_idx])},{int(spikes_glm[t_idx])}\n")
+        st.download_button("Download Spike Trains (CSV)", spike_csv.getvalue(), "spike_trains.csv", "text/csv")
+
+    with export_col2:
+        # Model parameters JSON
+        model_params = {
+            "cell_type": cell_type,
+            "rf_size": rf_size,
+            "surround_ratio": surround_ratio,
+            "temporal_decay_ms": temporal_decay,
+            "noise_level": noise_level,
+            "base_rate_hz": base_rate,
+            "refractory_ms": refractory_ms,
+            "history_length_ms": history_length,
+            "history_weight": history_weight,
+            "temporal_filter_coefficients": temporal.tolist(),
+            "history_filter_coefficients": history.tolist(),
+            "nonlinearity": "softplus (LN) / exponential link (GLM)",
+        }
+        st.download_button("Download Model Parameters (JSON)", json.dumps(model_params, indent=2), "model_params.json", "application/json")
 
 
 # ==================== Tab 6: Theory ====================
